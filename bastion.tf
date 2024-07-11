@@ -5,7 +5,6 @@ locals {
 data "aws_ami" "rhel9" {
   count = var.private ? 1 : 0
 
-  executable_users = ["self"]
   owners           = ["309956199498"]
   most_recent      = true
 

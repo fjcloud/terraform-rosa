@@ -143,34 +143,6 @@ resource "rhcs_cluster_rosa_hcp" "rosa" {
 
   depends_on = [module.network, module.account_roles_hcp, module.operator_roles_hcp]
 }
-
-# see https://registry.terraform.io/providers/terraform-redhat/rhcs/latest/docs/guides/worker-machine-pool for background
-data "rhcs_hcp_machine_pool" "default" {
-  count = var.hosted_control_plane ? length(local.hcp_machine_pools) : 0
-
-  cluster = rhcs_cluster_rosa_hcp.rosa[0].id
-  name    = local.hcp_machine_pools[count.index]
-}
-
-  aws_node_pool = {
-    instance_type            = data.rhcs_hcp_machine_pool.default[count.index].aws_node_pool.instance_type
-    ec2_metadata_http_tokens = data.rhcs_hcp_machine_pool.default[count.index].aws_node_pool.ec2_metadata_http_tokens
-    tags                     = var.tags
-  }
-
-  lifecycle {
-    precondition {
-      condition     = var.multi_az ? true : (local.hcp_replicas >= 2)
-      error_message = "must have a minimum of 2 'replicas' for single az use cases."
-    }
-
-    precondition {
-      condition     = local.autoscaling ? var.max_replicas >= local.hcp_replicas : true
-      error_message = "'max_replicas' must be greater than 'replicas'."
-    }
-  }
-}
-
 locals {
   cluster_id                = var.hosted_control_plane ? rhcs_cluster_rosa_hcp.rosa[0].id : rhcs_cluster_rosa_classic.rosa[0].id
   cluster_name              = var.hosted_control_plane ? rhcs_cluster_rosa_hcp.rosa[0].name : rhcs_cluster_rosa_classic.rosa[0].name

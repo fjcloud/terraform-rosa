@@ -152,23 +152,6 @@ data "rhcs_hcp_machine_pool" "default" {
   name    = local.hcp_machine_pools[count.index]
 }
 
-resource "rhcs_hcp_machine_pool" "default" {
-  count = var.hosted_control_plane ? length(data.rhcs_hcp_machine_pool.default) : 0
-
-  name        = data.rhcs_hcp_machine_pool.default[count.index].name
-  cluster     = rhcs_cluster_rosa_hcp.rosa[0].id
-  subnet_id   = data.rhcs_hcp_machine_pool.default[count.index].subnet_id
-  auto_repair = data.rhcs_hcp_machine_pool.default[count.index].auto_repair
-
-  # NOTE: if autoscaling is specified via the max_replicas variable, set replicas to null as the API will reject 
-  #       setting both replicas and autoscaling.*_replicas
-  replicas = local.autoscaling ? null : data.rhcs_hcp_machine_pool.default[count.index].replicas
-  autoscaling = {
-    enabled      = local.autoscaling
-    min_replicas = local.autoscaling ? local.hcp_replicas : null
-    max_replicas = local.autoscaling ? var.max_replicas : null
-  }
-
   aws_node_pool = {
     instance_type            = data.rhcs_hcp_machine_pool.default[count.index].aws_node_pool.instance_type
     ec2_metadata_http_tokens = data.rhcs_hcp_machine_pool.default[count.index].aws_node_pool.ec2_metadata_http_tokens

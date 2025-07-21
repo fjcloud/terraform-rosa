@@ -82,15 +82,6 @@ variable "max_replicas" {
   default     = null
 }
 
-variable "token" {
-  description = <<EOF
-  OCM token used to authenticate against the OpenShift Cluster Manager API.  See
-  https://console.redhat.com/openshift/token/rosa/show to access your token.
-  EOF
-  type        = string
-  sensitive   = true
-}
-
 variable "cluster_name" {
   description = "The name of the cluster.  This is also used as a prefix to name related components."
   type        = string
@@ -137,24 +128,6 @@ variable "tags" {
   description = "Tags applied to all objects."
   type        = map(string)
   default     = {}
-}
-
-variable "admin_password" {
-  description = <<EOF
-  Password for the 'admin' user. IDP is not created if unspecified.  Password must be 14 characters or more, contain
-  one uppercase letter and a symbol or number.
-  EOF
-  type        = string
-  sensitive   = true
-}
-
-variable "developer_password" {
-  description = <<EOF
-  Password for the 'developer' user. IDP is not created if unspecified.  Password must be 14 characters or more, contain
-  one uppercase letter and a symbol or number.
-  EOF
-  type        = string
-  sensitive   = true
 }
 
 variable "compute_machine_type" {

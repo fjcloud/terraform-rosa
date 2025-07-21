@@ -18,7 +18,6 @@ terraform {
 }
 
 provider "rhcs" {
-  token = var.token
 }
 
 provider "aws" {

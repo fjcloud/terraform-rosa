@@ -4,6 +4,15 @@ variable "private" {
   default     = false
 }
 
+variable "token" {
+  description = <<EOF
+  OCM token used to authenticate against the OpenShift Cluster Manager API.  See
+  https://console.redhat.com/openshift/token/rosa/show to access your token.
+  EOF
+  type        = string
+  sensitive   = true
+}
+
 variable "bastion_public_ssh_key" {
   description = <<EOF
   Location to an SSH public key file on the local system which is used to provide connectivity to the bastion host

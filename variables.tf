@@ -4,6 +4,16 @@ variable "private" {
   default     = false
 }
 
+variable "client_id" {
+  type        = string
+  default     = false
+}
+
+variable "client_secret" {
+  type        = string
+  default     = false
+}
+
 variable "bastion_public_ssh_key" {
   description = <<EOF
   Location to an SSH public key file on the local system which is used to provide connectivity to the bastion host
